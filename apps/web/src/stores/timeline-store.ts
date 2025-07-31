@@ -23,6 +23,9 @@ import { TIMELINE_CONSTANTS } from "@/constants/timeline-constants";
 import { toast } from "sonner";
 import { checkElementOverlaps, resolveElementOverlaps } from "@/lib/timeline";
 
+// Tool mode types
+export type TimelineToolMode = "select" | "split";
+
 // Helper function to manage element naming with suffixes
 const getElementNameWithSuffix = (
   originalName: string,
@@ -49,6 +52,10 @@ interface TimelineStore {
 
   // Manual method if you need to force recomputation
   getSortedTracks: () => TimelineTrack[];
+
+  // Tool mode
+  toolMode: TimelineToolMode;
+  setToolMode: (mode: TimelineToolMode) => void;
 
   // Snapping settings
   snappingEnabled: boolean;
@@ -257,6 +264,10 @@ export const useTimelineStore = create<TimelineStore>((set, get) => {
 
     // Snapping settings defaults
     snappingEnabled: true,
+
+    // Tool mode defaults
+    toolMode: "select",
+    setToolMode: (mode) => set({ toolMode: mode }),
 
     getSortedTracks: () => {
       const { _tracks } = get();

@@ -45,7 +45,9 @@ export type Action =
   | "duplicate-selected" // Duplicate selected element
   | "toggle-snapping" // Toggle snapping
   | "undo" // Undo last action
-  | "redo"; // Redo last undone action
+  | "redo" // Redo last undone action
+  | "set-tool-select" // Set tool mode to select
+  | "set-tool-split"; // Set tool mode to split
 
 /**
  * Defines the arguments, if present for a given type that is required to be passed on

@@ -71,6 +71,7 @@ export function TimelineElement({
     replaceElementMedia,
     rippleEditingEnabled,
     toggleElementHidden,
+    toolMode,
   } = useTimelineStore();
   const { currentTime } = usePlaybackStore();
 
@@ -326,6 +327,40 @@ export function TimelineElement({
     }
   };
 
+  const handleElementClick = (e: React.MouseEvent) => {
+    // Handle split mode
+    if (toolMode === "split") {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Calculate click position relative to element
+      const rect = e.currentTarget.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickTime = element.startTime + (clickX / (TIMELINE_CONSTANTS.PIXELS_PER_SECOND * zoomLevel));
+      
+      // Ensure click time is within element bounds
+      const effectiveStart = element.startTime;
+      const effectiveEnd = element.startTime + (element.duration - element.trimStart - element.trimEnd);
+      
+      if (clickTime >= effectiveStart && clickTime <= effectiveEnd) {
+        const secondElementId = splitElement(track.id, element.id, clickTime);
+        if (!secondElementId) {
+          toast.error("Failed to split element");
+        }
+      } else {
+        // If click is outside element bounds, just move playhead to that position
+        const { seek } = usePlaybackStore.getState();
+        seek(clickTime);
+      }
+      return;
+    }
+
+    // Normal click handling
+    if (onElementClick) {
+      onElementClick(e, element);
+    }
+  };
+
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
@@ -344,12 +379,14 @@ export function TimelineElement({
           onMouseLeave={resizing ? handleResizeEnd : undefined}
         >
           <div
-            className={`relative h-full rounded-[0.15rem] cursor-pointer overflow-hidden ${getTrackElementClasses(
+            className={`relative h-full rounded-[0.15rem] overflow-hidden ${getTrackElementClasses(
               track.type
             )} ${isSelected ? "border-b-[0.5px] border-t-[0.5px] border-foreground" : ""} ${
               isBeingDragged ? "z-50" : "z-10"
-            } ${element.hidden ? "opacity-50" : ""}`}
-            onClick={(e) => onElementClick && onElementClick(e, element)}
+            } ${element.hidden ? "opacity-50" : ""} ${
+              toolMode === "split" ? "cursor-crosshair" : "cursor-pointer"
+            }`}
+            onClick={handleElementClick}
             onMouseDown={handleElementMouseDown}
             onContextMenu={(e) =>
               onElementMouseDown && onElementMouseDown(e, element)
@@ -367,6 +404,11 @@ export function TimelineElement({
                   <EyeOff className="h-6 w-6 text-white" />
                 )}
               </div>
+            )}
+
+            {/* Split mode indicator */}
+            {toolMode === "split" && (
+              <div className="absolute inset-0 bg-primary/10 border border-primary/30 pointer-events-none" />
             )}
 
             {isSelected && (

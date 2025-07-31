@@ -20,6 +20,8 @@ import {
   ZoomIn,
   ZoomOut,
   Bookmark,
+  MousePointer,
+  ChevronDown,
 } from "lucide-react";
 import {
   Tooltip,
@@ -33,6 +35,12 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "../../ui/context-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../../ui/dropdown-menu";
 import { useTimelineStore } from "@/stores/timeline-store";
 import { useMediaStore } from "@/stores/media-store";
 import { usePlaybackStore } from "@/stores/playback-store";
@@ -59,6 +67,57 @@ import {
   snapTimeToFrame,
 } from "@/constants/timeline-constants";
 import { Slider } from "@/components/ui/slider";
+import type { TimelineToolMode } from "@/stores/timeline-store";
+import { useActionHandler } from "@/constants/actions";
+
+// Tool selector component
+function ToolSelector() {
+  const { toolMode, setToolMode } = useTimelineStore();
+
+  const tools: { mode: TimelineToolMode; icon: React.ReactNode; label: string; shortcut: string }[] = [
+    {
+      mode: "select",
+      icon: <MousePointer className="size-4" />,
+      label: "Select",
+      shortcut: "A",
+    },
+    {
+      mode: "split",
+      icon: <Scissors className="size-4" />,
+      label: "Split",
+      shortcut: "B",
+    },
+    // add more later for select inwards, select outwards, etc.
+  ];
+
+  const currentTool = tools.find(tool => tool.mode === toolMode) || tools[0];
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="secondary" size="sm" className="gap-2 h-auto py-1.5 px-2.5 flex items-center justify-center">
+          {currentTool.icon}
+          <ChevronDown className="size-3 text-muted-foreground" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start">
+        {tools.map((tool) => (
+          <DropdownMenuItem
+            key={tool.mode}
+            onClick={() => setToolMode(tool.mode)}
+            className={toolMode === tool.mode ? "bg-accent" : ""}
+          >
+            <div className="flex items-center gap-2 w-full">
+              {tool.icon}
+              <span className="flex-1">{tool.label}</span>
+              <span className="text-xs text-muted-foreground">{tool.shortcut}</span>
+            </div>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 export function Timeline() {
   // Timeline shows all tracks (video, audio, effects) and their elements.
@@ -81,6 +140,11 @@ export function Timeline() {
   const [isDragOver, setIsDragOver] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+
+  // Tool mode action handlers
+  useActionHandler("set-tool-select", () => setToolMode("select"), true);
+  useActionHandler("set-tool-split", () => setToolMode("split"), true);
+  const { setToolMode } = useTimelineStore();
   const dragCounterRef = useRef(0);
   const timelineRef = useRef<HTMLDivElement>(null);
   const rulerRef = useRef<HTMLDivElement>(null);
@@ -1039,6 +1103,9 @@ function TimelineToolbar({
           >
             {currentTime.toFixed(1)}s / {duration.toFixed(1)}s
           </div>
+          <div className="w-px h-6 bg-border mx-1" />
+          {/* Tool Selector */}
+          <ToolSelector />
           {/* Test Clip Button - for debugging */}
           {tracks.length === 0 && (
             <>

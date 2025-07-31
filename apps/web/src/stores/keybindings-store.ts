@@ -27,6 +27,8 @@ export const defaultKeybindings: KeybindingConfig = {
   "ctrl+y": "redo",
   delete: "delete-selected",
   backspace: "delete-selected",
+  a: "set-tool-select",
+  b: "set-tool-split",
 };
 
 export interface KeybindingConflict {
