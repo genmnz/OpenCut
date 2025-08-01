@@ -224,6 +224,30 @@ class StorageService {
     await timelineAdapter.remove("timeline");
   }
 
+  // Copy project data methods
+  async copyProjectMedia(sourceProjectId: string, targetProjectId: string): Promise<void> {
+    const sourceAdapters = this.getProjectMediaAdapters(sourceProjectId);
+    const targetAdapters = this.getProjectMediaAdapters(targetProjectId);
+
+    // Get all media items from source project
+    const mediaIds = await sourceAdapters.mediaMetadataAdapter.list();
+    
+    // Copy each media item
+    for (const mediaId of mediaIds) {
+      const mediaItem = await this.loadMediaItem(sourceProjectId, mediaId);
+      if (mediaItem) {
+        await this.saveMediaItem(targetProjectId, mediaItem);
+      }
+    }
+  }
+
+  async copyProjectTimeline(sourceProjectId: string, targetProjectId: string): Promise<void> {
+    const sourceTimeline = await this.loadTimeline(sourceProjectId);
+    if (sourceTimeline) {
+      await this.saveTimeline(targetProjectId, sourceTimeline);
+    }
+  }
+
   // Utility methods
   async clearAllData(): Promise<void> {
     // Clear all projects

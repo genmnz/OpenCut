@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "./ui/button";
-import { ChevronDown, ArrowLeft, Download, SquarePen, Trash } from "lucide-react";
+import { ChevronDown, ArrowLeft, Download, SquarePen, Trash, Copy } from "lucide-react";
 import { useTimelineStore } from "@/stores/timeline-store";
 import { HeaderBase } from "./header-base";
 import { formatTimeCode } from "@/lib/time";
@@ -20,10 +20,11 @@ import { RenameProjectDialog } from "./rename-project-dialog";
 import { DeleteProjectDialog } from "./delete-project-dialog";
 import { useRouter } from "next/navigation";
 import { FaDiscord, FaGithub } from "react-icons/fa6";
+import { toast } from "sonner";
 
 export function EditorHeader() {
   const { getTotalDuration } = useTimelineStore();
-  const { activeProject, renameProject, deleteProject } = useProjectStore();
+  const { activeProject, renameProject, deleteProject, duplicateProject } = useProjectStore();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
   const router = useRouter();
@@ -55,6 +56,21 @@ export function EditorHeader() {
     }
   };
 
+  const handleDuplicate = async () => {
+    if (activeProject) {
+      try {
+        const newProjectId = await duplicateProject(activeProject.id);
+        toast.success("Project duplicated successfully", {
+          description: "You can find the duplicate in your projects list",
+        });
+        // Optionally navigate to the new project
+        // router.push(`/editor/${newProjectId}`);
+      } catch (error) {
+        console.error("Failed to duplicate project:", error);
+      }
+    }
+  };
+
   const leftContent = (
     <div className="flex items-center gap-2">
       <DropdownMenu>
@@ -80,6 +96,13 @@ export function EditorHeader() {
           >
             <SquarePen className="size-4" />
             Rename project
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="flex items-center gap-1.5"
+            onClick={handleDuplicate}
+          >
+            <Copy className="size-4" />
+            Duplicate project
           </DropdownMenuItem>
           <DropdownMenuItem
             variant="destructive"

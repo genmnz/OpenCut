@@ -342,7 +342,15 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
         updatedAt: new Date(),
       };
 
+      // Save the new project first
       await storageService.saveProject(newProject);
+
+      // Copy all project data (media and timeline) in parallel
+      await Promise.all([
+        storageService.copyProjectMedia(projectId, newProject.id),
+        storageService.copyProjectTimeline(projectId, newProject.id),
+      ]);
+
       await get().loadAllProjects();
       return newProject.id;
     } catch (error) {
