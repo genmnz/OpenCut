@@ -862,23 +862,12 @@ export function Timeline() {
                           <ContextMenuItem onClick={(e) => e.stopPropagation()}>
                             Track settings (soon)
                           </ContextMenuItem>
-                          {activeProject?.bookmarks?.length && activeProject.bookmarks.length > 0 && (
-                            <>
-                              <ContextMenuItem disabled>Bookmarks</ContextMenuItem>
-                              {activeProject.bookmarks.map((bookmarkTime, i) => (
-                                <ContextMenuItem 
-                                  key={`bookmark-menu-${i}`}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    seek(bookmarkTime);
-                                  }}
-                                >
-                                  <Bookmark className="size-3 mr-2 inline-block" />
-                                  {bookmarkTime.toFixed(1)}s
-                                </ContextMenuItem>
-                              ))}
-                              </>
-                          )}
+                            <ContextMenuItem onClick={(e) => e.stopPropagation()}>
+                            Group layers (soon)
+                          </ContextMenuItem>
+                           <ContextMenuItem onClick={(e) => e.stopPropagation()}>
+                            Render layers (soon)
+                          </ContextMenuItem>
                         </ContextMenuContent>
                       </ContextMenu>
                     ))}
@@ -933,8 +922,8 @@ function TimelineToolbar({
     rippleEditingEnabled,
     toggleRippleEditing,
   } = useTimelineStore();
-  const { currentTime, duration, isPlaying, toggle } = usePlaybackStore();
-  const { toggleBookmark, isBookmarked } = useProjectStore();
+  const { currentTime, duration, isPlaying, toggle, seek } = usePlaybackStore();
+  const { toggleBookmark, isBookmarked, removeBookmark, activeProject } = useProjectStore();
 
   // Action handlers
   const handleSplitSelected = () => {
@@ -1067,6 +1056,10 @@ function TimelineToolbar({
   
   const handleToggleBookmark = async () => {
     await toggleBookmark(currentTime);
+  };
+
+  const handleDeleteBookmark = async (bookmarkTime: number) => {
+    await removeBookmark(bookmarkTime);
   };
   
   // Check if the current time is bookmarked
@@ -1206,16 +1199,62 @@ function TimelineToolbar({
             <TooltipContent>Delete element (Delete)</TooltipContent>
           </Tooltip>
           <div className="w-px h-6 bg-border mx-1" />
+          
+          <Button  variant="secondary" size="sm" className="gap-2 flex items-center justify-center">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="text" size="icon" onClick={handleToggleBookmark}>
+              <Button variant="text" size="icon" className="size-4"
+                onClick={handleToggleBookmark}>
                 <Bookmark className={`size-4 ${currentBookmarked ? "fill-primary text-primary" : ""}`} />
               </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              {currentBookmarked ? "Remove bookmark" : "Add bookmark"}
-            </TooltipContent>
+          </TooltipTrigger>
+          <TooltipContent>
+            {currentBookmarked ? "Remove bookmark" : "Add bookmark"}
+          </TooltipContent>
           </Tooltip>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="text" size="icon" className="size-4"> 
+                <ChevronDown className=" text-muted-foreground" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              {activeProject?.bookmarks && activeProject.bookmarks.length > 0 && (
+                <>
+                  <DropdownMenuItem disabled className="text-xs text-muted-foreground">
+                    Bookmarks
+                  </DropdownMenuItem>
+                  {activeProject.bookmarks.map((bookmarkTime, i) => (
+                    <DropdownMenuItem 
+                      key={`bookmark-dropdown-${i}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        seek(bookmarkTime);
+                      }}
+                      className="flex items-center justify-between"
+                    >
+                      <div className="flex items-center">
+                        <Bookmark className="size-3 mr-2" />
+                        {bookmarkTime.toFixed(1)}s
+                      </div>
+                      <Button
+                        variant="secondary"
+                        size="icon"
+                        className="h-6 w-6 ml-2"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteBookmark(bookmarkTime);
+                        }}
+                      >
+                        <Trash2 className="size-3" />
+                      </Button>
+                    </DropdownMenuItem>
+                  ))}
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          </Button>
         </TooltipProvider>
       </div>
       <div className="flex items-center gap-1">
