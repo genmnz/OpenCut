@@ -67,6 +67,7 @@ export function TimelineElement({
     splitAndKeepLeft,
     splitAndKeepRight,
     separateAudio,
+    extractAudioFromMedia,
     addElementToTrack,
     replaceElementMedia,
     rippleEditingEnabled,
@@ -156,6 +157,11 @@ export function TimelineElement({
   const handleToggleElementHidden = (e: React.MouseEvent) => {
     e.stopPropagation();
     toggleElementHidden(track.id, element.id);
+  };
+
+  const handleExtractAudio = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    await extractAudioFromMedia(track.id, element.id);
   };
 
   const handleReplaceClip = (e: React.MouseEvent) => {
@@ -332,16 +338,16 @@ export function TimelineElement({
     if (toolMode === "split") {
       e.preventDefault();
       e.stopPropagation();
-      
+
       // Calculate click position relative to element
       const rect = e.currentTarget.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
       const clickTime = element.startTime + (clickX / (TIMELINE_CONSTANTS.PIXELS_PER_SECOND * zoomLevel));
-      
+
       // Ensure click time is within element bounds
       const effectiveStart = element.startTime;
       const effectiveEnd = element.startTime + (element.duration - element.trimStart - element.trimEnd);
-      
+
       if (clickTime >= effectiveStart && clickTime <= effectiveEnd) {
         const secondElementId = splitElement(track.id, element.id, clickTime);
         if (!secondElementId) {
@@ -458,11 +464,20 @@ export function TimelineElement({
           <Copy className="h-4 w-4 mr-2" />
           Duplicate {element.type === "text" ? "text" : "clip"}
         </ContextMenuItem>
+        <ContextMenuSeparator />
         {element.type === "media" && (
-          <ContextMenuItem onClick={handleReplaceClip}>
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Replace clip
-          </ContextMenuItem>
+          <>
+            <ContextMenuItem onClick={handleReplaceClip}>
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Replace clip
+            </ContextMenuItem>
+            {mediaItem && mediaItem.type === "video" && (
+              <ContextMenuItem onClick={handleExtractAudio}>
+                <Music className="h-4 w-4 mr-2" />
+                Extract audio
+              </ContextMenuItem>
+            )}
+          </>
         )}
         <ContextMenuSeparator />
         <ContextMenuItem

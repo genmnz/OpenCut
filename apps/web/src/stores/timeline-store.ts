@@ -152,6 +152,7 @@ interface TimelineStore {
     splitTime: number
   ) => void;
   separateAudio: (trackId: string, elementId: string) => string | null;
+  extractAudioFromMedia: (trackId: string, elementId: string) => Promise<string | null>;
 
   // Replace media for an element
   replaceElementMedia: (
@@ -1104,6 +1105,108 @@ export const useTimelineStore = create<TimelineStore>((set, get) => {
       }
 
       return audioElementId;
+    },
+
+    // Extract audio from video element using FFmpeg and create new audio element
+    extractAudioFromMedia: async (trackId, elementId) => {
+      const { _tracks } = get();
+      const track = _tracks.find((t) => t.id === trackId);
+      const element = track?.elements.find((c) => c.id === elementId);
+
+      if (!element || track?.type !== "media" || element.type !== "media") return null;
+
+      const { mediaItems } = useMediaStore.getState();
+      const mediaItem = mediaItems.find((item) => item.id === element.mediaId);
+
+      if (!mediaItem || mediaItem.type !== "video") {
+        toast.error("Only video files can have audio extracted");
+        return null;
+      }
+
+      get().pushHistory();
+
+      const progressToast = toast.loading("Extracting audio from video...", {
+        duration: Infinity,
+      });
+
+      try {
+        const { extractAudio } = await import("@/lib/ffmpeg-utils");
+        const audioBlob = await extractAudio(mediaItem.file, "mp3");
+
+        const audioFileName = getElementNameWithSuffix(element.name, "audio") + ".mp3";
+        const audioFile = new File([audioBlob], audioFileName, { type: "audio/mpeg" });
+
+        const { addMediaItem } = useMediaStore.getState();
+        const { activeProject } = useProjectStore.getState();
+
+        if (!activeProject) {
+          throw new Error("No active project found");
+        }
+
+        await addMediaItem(activeProject.id, {
+          name: audioFileName,
+          type: "audio" as const,
+          file: audioFile,
+          url: URL.createObjectURL(audioFile),
+          duration: mediaItem.duration,
+        });
+
+        // Get the newly added audio item
+        const updatedMediaItems = useMediaStore.getState().mediaItems;
+        const newAudioMediaItem = updatedMediaItems.find(item =>
+          item.name === audioFileName && item.type === "audio"
+        );
+
+        if (!newAudioMediaItem) {
+          throw new Error("Failed to add extracted audio to media library");
+        }
+
+        // Find existing audio track or create new one
+        const existingAudioTrack = _tracks.find((t) => t.type === "audio");
+        const audioElementId = generateUUID();
+
+        const newAudioElement = {
+          type: "media" as const,
+          id: audioElementId,
+          name: getElementNameWithSuffix(element.name, "audio"),
+          mediaId: newAudioMediaItem.id,
+          duration: element.duration,
+          startTime: element.startTime,
+          trimStart: element.trimStart,
+          trimEnd: element.trimEnd,
+          hidden: false,
+        };
+
+        if (existingAudioTrack) {
+          updateTracksAndSave(
+            get()._tracks.map((track) =>
+              track.id === existingAudioTrack.id
+                ? { ...track, elements: [...track.elements, newAudioElement] }
+                : track
+            )
+          );
+        } else {
+          const newAudioTrack: TimelineTrack = {
+            id: generateUUID(),
+            name: "Audio Track",
+            type: "audio",
+            elements: [newAudioElement],
+            muted: false,
+          };
+          updateTracksAndSave([...get()._tracks, newAudioTrack]);
+        }
+
+        toast.dismiss(progressToast);
+        toast.success("Audio extracted successfully");
+        return audioElementId;
+
+      } catch (error) {
+        toast.dismiss(progressToast);
+        toast.error("Failed to extract audio", {
+          description: error instanceof Error ? error.message : "Unknown error occurred",
+        });
+        return null;
+      }
     },
 
     // Replace media for an element

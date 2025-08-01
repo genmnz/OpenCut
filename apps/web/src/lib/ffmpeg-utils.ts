@@ -1,5 +1,5 @@
 import { FFmpeg } from "@ffmpeg/ffmpeg";
-import { toBlobURL } from "@ffmpeg/util";
+import { toBlobURL, fetchFile } from "@ffmpeg/util";
 
 let ffmpeg: FFmpeg | null = null;
 
@@ -10,6 +10,8 @@ export const initFFmpeg = async (): Promise<FFmpeg> => {
 
   // Use locally hosted files instead of CDN
   const baseURL = "/ffmpeg";
+  // I had a local issue initializing from hosted files so I used   
+  // const baseURL = "https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd";
 
   await ffmpeg.load({
     coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, "text/javascript"),
@@ -28,11 +30,7 @@ export const generateThumbnail = async (
   const inputName = "input.mp4";
   const outputName = "thumbnail.jpg";
 
-  // Write input file
-  await ffmpeg.writeFile(
-    inputName,
-    new Uint8Array(await videoFile.arrayBuffer())
-  );
+  await ffmpeg.writeFile(inputName, await fetchFile(videoFile));
 
   // Generate thumbnail at specific time
   await ffmpeg.exec([
@@ -79,10 +77,7 @@ export const trimVideo = async (
   }
 
   // Write input file
-  await ffmpeg.writeFile(
-    inputName,
-    new Uint8Array(await videoFile.arrayBuffer())
-  );
+  await ffmpeg.writeFile(inputName, await fetchFile(videoFile));
 
   const duration = endTime - startTime;
 
@@ -165,6 +160,7 @@ export const getVideoInfo = async (
     duration = parseInt(h) * 3600 + parseInt(m) * 60 + parseFloat(s);
   }
 
+  // Parse video info
   const videoStreamMatch = ffmpegOutput.match(
     /Video:.* (\d+)x(\d+)[^,]*, ([\d.]+) fps/
   );
@@ -252,7 +248,7 @@ export const extractAudio = async (
   await ffmpeg.exec([
     "-i",
     inputName,
-    "-vn", // Disable video
+    "-vn", // No video
     "-acodec",
     format === "mp3" ? "libmp3lame" : "pcm_s16le",
     outputName,
