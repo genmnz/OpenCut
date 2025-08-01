@@ -144,7 +144,7 @@ export function MediaView() {
               loading="lazy"
             />
             <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded">
-              <Video className="h-6 w-6 text-white drop-shadow-md" />
+              <Video className="size-6 text-white drop-shadow-md" />
             </div>
             {item.duration && (
               <div className="absolute bottom-1 right-1 bg-black/70 text-white text-xs px-1 rounded">
@@ -156,7 +156,7 @@ export function MediaView() {
       }
       return (
         <div className="w-full h-full bg-muted/30 flex flex-col items-center justify-center text-muted-foreground rounded">
-          <Video className="h-6 w-6 mb-1" />
+          <Video className="size-6 mb-1" />
           <span className="text-xs">Video</span>
           {item.duration && (
             <span className="text-xs opacity-70">
@@ -170,7 +170,7 @@ export function MediaView() {
     if (item.type === "audio") {
       return (
         <div className="w-full h-full bg-linear-to-br from-green-500/20 to-emerald-500/20 flex flex-col items-center justify-center text-muted-foreground rounded border border-green-500/20">
-          <Music className="h-6 w-6 mb-1" />
+          <Music className="size-6 mb-1" />
           <span className="text-xs">Audio</span>
           {item.duration && (
             <span className="text-xs opacity-70">
@@ -183,7 +183,7 @@ export function MediaView() {
 
     return (
       <div className="w-full h-full bg-muted/30 flex flex-col items-center justify-center text-muted-foreground rounded">
-        <Image className="h-6 w-6" />
+        <Image className="size-6" />
         <span className="text-xs mt-1">Unknown</span>
       </div>
     );
@@ -234,9 +234,9 @@ export function MediaView() {
               className="flex-none bg-transparent min-w-[30px] whitespace-nowrap overflow-hidden px-2 justify-center items-center h-9"
             >
               {isProcessing ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Loader2 className="size-4 animate-spin" />
               ) : (
-                <Plus className="h-4 w-4" />
+                <Plus className="size-4" />
               )}
             </Button>
           </div>

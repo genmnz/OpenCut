@@ -234,9 +234,9 @@ export default async function ContributorsPage() {
                   rel="noopener noreferrer"
                 >
                   <Button variant="outline" className="gap-2">
-                    <GithubIcon className="h-4 w-4" />
+                    <GithubIcon className="size-4" />
                     View on GitHub
-                    <ExternalLink className="h-4 w-4" />
+                    <ExternalLink className="size-4" />
                   </Button>
                 </Link>
               </div>
@@ -305,7 +305,7 @@ export default async function ContributorsPage() {
                     rel="noopener noreferrer"
                   >
                     <Button size="lg" className="gap-2 group">
-                      <GithubIcon className="h-4 w-4 group-hover:scale-110 transition-transform" />
+                      <GithubIcon className="size-4 group-hover:scale-110 transition-transform" />
                       Start Contributing
                     </Button>
                   </Link>
@@ -316,7 +316,7 @@ export default async function ContributorsPage() {
                   >
                     <Button variant="outline" size="lg" className="gap-2 group">
                       Browse Issues
-                      <ExternalLink className="h-4 w-4 group-hover:scale-110 transition-transform" />
+                      <ExternalLink className="size-4 group-hover:scale-110 transition-transform" />
                     </Button>
                   </Link>
                 </div>

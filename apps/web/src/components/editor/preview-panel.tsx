@@ -652,7 +652,7 @@ function FullscreenToolbar({
           className="h-auto p-0 text-white hover:text-white/80"
           title="Skip backward 1s"
         >
-          <SkipBack className="h-3 w-3" />
+          <SkipBack className="size-3" />
         </Button>
         <Button
           variant="text"
@@ -662,9 +662,9 @@ function FullscreenToolbar({
           className="h-auto p-0 text-white hover:text-white/80"
         >
           {isPlaying ? (
-            <Pause className="h-3 w-3" />
+            <Pause className="size-3" />
           ) : (
-            <Play className="h-3 w-3" />
+            <Play className="size-3" />
           )}
         </Button>
         <Button
@@ -675,7 +675,7 @@ function FullscreenToolbar({
           className="h-auto p-0 text-white hover:text-white/80"
           title="Skip forward 1s"
         >
-          <SkipForward className="h-3 w-3" />
+          <SkipForward className="size-3" />
         </Button>
       </div>
 
@@ -893,7 +893,7 @@ function PreviewToolbar({
           className="h-auto p-0 text-white hover:text-white/80"
           title="Skip backward 1s"
         >
-          <SkipBack className="h-3 w-3" />
+          <SkipBack className="size-3" />
         </Button>
         <Button
           variant="text"
@@ -903,9 +903,9 @@ function PreviewToolbar({
           className="h-auto p-0 text-white hover:text-white/80"
         >
           {isPlaying ? (
-            <Pause className="h-3 w-3" />
+            <Pause className="size-3" />
           ) : (
-            <Play className="h-3 w-3" />
+            <Play className="size-3" />
           )}
         </Button>
         <Button
@@ -916,7 +916,7 @@ function PreviewToolbar({
           className="h-auto p-0 text-white hover:text-white/80"
           title="Skip forward 1s"
         >
-          <SkipForward className="h-3 w-3" />
+          <SkipForward className="size-3" />
         </Button>
       </div>
       <div className="flex items-center gap-3">

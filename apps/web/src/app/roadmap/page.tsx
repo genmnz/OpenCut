@@ -133,7 +133,7 @@ export default function RoadmapPage() {
                 target="_blank"
               >
                 <Badge variant="secondary" className="gap-2 mb-6">
-                  <GithubIcon className="h-3 w-3" />
+                  <GithubIcon className="size-3" />
                   Open Source
                 </Badge>
               </Link>
@@ -219,7 +219,7 @@ export default function RoadmapPage() {
                       variant="outline"
                       className="text-sm px-4 py-2 hover:bg-muted/50 transition-colors"
                     >
-                      <GithubIcon className="h-4 w-4 mr-2" />
+                      <GithubIcon className="size-4 mr-2" />
                       Start Contributing
                     </Badge>
                   </Link>

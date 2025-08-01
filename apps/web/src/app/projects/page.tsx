@@ -275,7 +275,7 @@ export default function ProjectsPage() {
                 <div className="px-0 pt-5 flex flex-col gap-1">
                   <Skeleton className="h-4 w-3/4 bg-muted/50" />
                   <div className="flex items-center gap-1.5">
-                    <Skeleton className="h-4 w-4 bg-muted/50" />
+                    <Skeleton className="size-4 bg-muted/50" />
                     <Skeleton className="h-4 w-24 bg-muted/50" />
                   </div>
                 </div>
@@ -406,7 +406,7 @@ function ProjectCard({
                   onSelect?.(project.id, checked as boolean)
                 }
                 onClick={(e) => e.stopPropagation()}
-                className="w-4 h-4"
+                className="size-4"
               />
             </div>
           </div>
@@ -415,7 +415,7 @@ function ProjectCard({
         <div className="absolute inset-0">
           {isLoadingThumbnail ? (
             <div className="w-full h-full bg-muted/50 flex items-center justify-center">
-              <Loader2 className="h-12 w-12 text-muted-foreground animate-spin" />
+              <Loader2 className="size-12 text-muted-foreground animate-spin" />
             </div>
           ) : dynamicThumbnail ? (
             <Image
@@ -426,7 +426,7 @@ function ProjectCard({
             />
           ) : (
             <div className="w-full h-full bg-muted/50 flex items-center justify-center">
-              <Video className="h-12 w-12 shrink-0 text-muted-foreground" />
+              <Video className="size-12 shrink-0 text-muted-foreground" />
             </div>
           )}
         </div>
@@ -552,8 +552,8 @@ function CreateButton({ onClick }: { onClick?: () => void }) {
 function NoProjects({ onCreateProject }: { onCreateProject: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
-      <div className="w-16 h-16 rounded-full bg-muted/30 flex items-center justify-center mb-4">
-        <Video className="h-8 w-8 text-muted-foreground" />
+      <div className="size-16 rounded-full bg-muted/30 flex items-center justify-center mb-4">
+        <Video className="size-8 text-muted-foreground" />
       </div>
       <h3 className="text-lg font-medium mb-2">No projects yet</h3>
       <p className="text-muted-foreground mb-6 max-w-md">
@@ -561,7 +561,7 @@ function NoProjects({ onCreateProject }: { onCreateProject: () => void }) {
         professional videos.
       </p>
       <Button size="lg" className="gap-2" onClick={onCreateProject}>
-        <Plus className="h-4 w-4" />
+        <Plus className="size-4" />
         Create Your First Project
       </Button>
     </div>
@@ -577,8 +577,8 @@ function NoResults({
 }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
-      <div className="w-16 h-16 rounded-full bg-muted/30 flex items-center justify-center mb-4">
-        <Search className="h-8 w-8 text-muted-foreground" />
+      <div className="size-16 rounded-full bg-muted/30 flex items-center justify-center mb-4">
+        <Search className="size-8 text-muted-foreground" />
       </div>
       <h3 className="text-lg font-medium mb-2">No results found</h3>
       <p className="text-muted-foreground mb-6 max-w-md">

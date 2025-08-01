@@ -71,7 +71,7 @@ export function Hero() {
               className="px-6 h-11 text-base bg-foreground"
             >
               Try early beta
-              <ArrowRight className="relative z-10 ml-0.5 h-4 w-4 inline-block" />
+              <ArrowRight className="relative z-10 ml-0.5 size-4 inline-block" />
             </Button>
           </Link>
         </motion.div>

@@ -873,7 +873,7 @@ export function Timeline() {
                                     seek(bookmarkTime);
                                   }}
                                 >
-                                  <Bookmark className="h-3 w-3 mr-2 inline-block" />
+                                  <Bookmark className="size-3 mr-2 inline-block" />
                                   {bookmarkTime.toFixed(1)}s
                                 </ContextMenuItem>
                               ))}
@@ -1085,9 +1085,9 @@ function TimelineToolbar({
                 className="mr-2"
               >
                 {isPlaying ? (
-                  <Pause className="h-4 w-4" />
+                  <Pause className="size-4" />
                 ) : (
-                  <Play className="h-4 w-4" />
+                  <Play className="size-4" />
                 )}
               </Button>
             </TooltipTrigger>
@@ -1140,7 +1140,7 @@ function TimelineToolbar({
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant="text" size="icon" onClick={handleSplitSelected}>
-                <Scissors className="h-4 w-4" />
+                <Scissors className="size-4" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Split element (Ctrl+S)</TooltipContent>
@@ -1152,7 +1152,7 @@ function TimelineToolbar({
                 size="icon"
                 onClick={handleSplitAndKeepLeft}
               >
-                <ArrowLeftToLine className="h-4 w-4" />
+                <ArrowLeftToLine className="size-4" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Split and keep left (Ctrl+Q)</TooltipContent>
@@ -1164,7 +1164,7 @@ function TimelineToolbar({
                 size="icon"
                 onClick={handleSplitAndKeepRight}
               >
-                <ArrowRightToLine className="h-4 w-4" />
+                <ArrowRightToLine className="size-4" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Split and keep right (Ctrl+W)</TooltipContent>
@@ -1172,7 +1172,7 @@ function TimelineToolbar({
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant="text" size="icon" onClick={handleSeparateAudio}>
-                <SplitSquareHorizontal className="h-4 w-4" />
+                <SplitSquareHorizontal className="size-4" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Separate audio (Ctrl+D)</TooltipContent>
@@ -1184,7 +1184,7 @@ function TimelineToolbar({
                 size="icon"
                 onClick={handleDuplicateSelected}
               >
-                <Copy className="h-4 w-4" />
+                <Copy className="size-4" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Duplicate element (Ctrl+D)</TooltipContent>
@@ -1192,7 +1192,7 @@ function TimelineToolbar({
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant="text" size="icon" onClick={handleFreezeSelected}>
-                <Snowflake className="h-4 w-4" />
+                <Snowflake className="size-4" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Freeze frame (F)</TooltipContent>
@@ -1200,7 +1200,7 @@ function TimelineToolbar({
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant="text" size="icon" onClick={handleDeleteSelected}>
-                <Trash2 className="h-4 w-4" />
+                <Trash2 className="size-4" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Delete element (Delete)</TooltipContent>
@@ -1209,7 +1209,7 @@ function TimelineToolbar({
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant="text" size="icon" onClick={handleToggleBookmark}>
-                <Bookmark className={`h-4 w-4 ${currentBookmarked ? "fill-primary text-primary" : ""}`} />
+                <Bookmark className={`size-4 ${currentBookmarked ? "fill-primary text-primary" : ""}`} />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -1224,9 +1224,9 @@ function TimelineToolbar({
             <TooltipTrigger asChild>
               <Button variant="text" size="icon" onClick={toggleSnapping}>
                 {snappingEnabled ? (
-                  <Magnet className="h-4 w-4 text-primary" />
+                  <Magnet className="size-4 text-primary" />
                 ) : (
-                  <Magnet className="h-4 w-4" />
+                  <Magnet className="size-4" />
                 )}
               </Button>
             </TooltipTrigger>
@@ -1236,7 +1236,7 @@ function TimelineToolbar({
             <TooltipTrigger asChild>
               <Button variant="text" size="icon" onClick={toggleRippleEditing}>
                 <Link
-                  className={`h-4 w-4 ${
+                  className={`size-4 ${
                     rippleEditingEnabled ? "text-primary" : ""
                   }`}
                 />
@@ -1253,7 +1253,7 @@ function TimelineToolbar({
         <div className="h-6 w-px bg-border mx-1" />
         <div className="flex items-center gap-1">
           <Button variant="text" size="icon" onClick={handleZoomOut}>
-            <ZoomOut className="h-4 w-4" />
+            <ZoomOut className="size-4" />
           </Button>
           <Slider
             className="w-24"
@@ -1264,7 +1264,7 @@ function TimelineToolbar({
             step={0.25}
           />
           <Button variant="text" size="icon" onClick={handleZoomIn}>
-            <ZoomIn className="h-4 w-4" />
+            <ZoomIn className="size-4" />
           </Button>
         </div>
       </div>

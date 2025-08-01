@@ -31,7 +31,7 @@ export function Header() {
       <Link href="/projects">
         <Button size="sm" className="text-sm ml-4">
           Projects
-          <ArrowRight className="h-4 w-4" />
+          <ArrowRight className="size-4" />
         </Button>
       </Link>
     </nav>

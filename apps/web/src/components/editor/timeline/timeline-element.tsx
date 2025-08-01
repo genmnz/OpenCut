@@ -405,9 +405,9 @@ export function TimelineElement({
             {element.hidden && (
               <div className="absolute inset-0 bg-black opacity-65 flex items-center justify-center pointer-events-none">
                 {isAudio ? (
-                  <VolumeX className="h-6 w-6 text-white" />
+                  <VolumeX className="size-6 text-white" />
                 ) : (
-                  <EyeOff className="h-6 w-6 text-white" />
+                  <EyeOff className="size-6 text-white" />
                 )}
               </div>
             )}
@@ -434,20 +434,20 @@ export function TimelineElement({
       </ContextMenuTrigger>
       <ContextMenuContent className="z-200">
         <ContextMenuItem onClick={handleElementSplitContext}>
-          <Scissors className="h-4 w-4 mr-2" />
+          <Scissors className="size-4 mr-2" />
           Split at playhead
         </ContextMenuItem>
         <ContextMenuItem onClick={handleToggleElementHidden}>
           {isAudio ? (
             element.hidden ? (
-              <Volume2 className="h-4 w-4 mr-2" />
+              <Volume2 className="size-4 mr-2" />
             ) : (
-              <VolumeX className="h-4 w-4 mr-2" />
+              <VolumeX className="size-4 mr-2" />
             )
           ) : element.hidden ? (
-            <Eye className="h-4 w-4 mr-2" />
+            <Eye className="size-4 mr-2" />
           ) : (
-            <EyeOff className="h-4 w-4 mr-2" />
+            <EyeOff className="size-4 mr-2" />
           )}
           <span>
             {isAudio
@@ -461,19 +461,19 @@ export function TimelineElement({
           </span>
         </ContextMenuItem>
         <ContextMenuItem onClick={handleElementDuplicateContext}>
-          <Copy className="h-4 w-4 mr-2" />
+          <Copy className="size-4 mr-2" />
           Duplicate {element.type === "text" ? "text" : "clip"}
         </ContextMenuItem>
         <ContextMenuSeparator />
         {element.type === "media" && (
           <>
             <ContextMenuItem onClick={handleReplaceClip}>
-              <RefreshCw className="h-4 w-4 mr-2" />
+              <RefreshCw className="size-4 mr-2" />
               Replace clip
             </ContextMenuItem>
             {mediaItem && mediaItem.type === "video" && (
               <ContextMenuItem onClick={handleExtractAudio}>
-                <Music className="h-4 w-4 mr-2" />
+                <Music className="size-4 mr-2" />
                 Extract audio
               </ContextMenuItem>
             )}
@@ -484,7 +484,7 @@ export function TimelineElement({
           onClick={handleElementDeleteContext}
           className="text-destructive focus:text-destructive"
         >
-          <Trash2 className="h-4 w-4 mr-2" />
+          <Trash2 className="size-4 mr-2" />
           Delete {element.type === "text" ? "text" : "clip"}
         </ContextMenuItem>
       </ContextMenuContent>

@@ -70,7 +70,7 @@ export function EditorHeader() {
         <DropdownMenuContent align="start" className="w-40">
           <Link href="/projects">
             <DropdownMenuItem className="flex items-center gap-1.5">
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="size-4" />
               Projects
             </DropdownMenuItem>
           </Link>
@@ -78,7 +78,7 @@ export function EditorHeader() {
             className="flex items-center gap-1.5"
             onClick={() => setIsRenameDialogOpen(true)}
           >
-            <SquarePen className="h-4 w-4" />
+            <SquarePen className="size-4" />
             Rename project
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -86,7 +86,7 @@ export function EditorHeader() {
             className="flex items-center gap-1.5"
             onClick={() => setIsDeleteDialogOpen(true)}
           >
-            <Trash className="h-4 w-4" />
+            <Trash className="size-4" />
             Delete Project
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -97,7 +97,7 @@ export function EditorHeader() {
               rel="noopener noreferrer"
               className="flex items-center gap-1.5"
             >
-              <FaDiscord className="h-4 w-4" />
+              <FaDiscord className="size-4" />
               Discord
             </Link>
           </DropdownMenuItem>
@@ -138,7 +138,7 @@ export function EditorHeader() {
         className="h-7 text-xs !bg-linear-to-r from-cyan-400 to-blue-500 text-white hover:opacity-85 transition-opacity"
         onClick={handleExport}
       >
-        <Download className="h-4 w-4" />
+        <Download className="size-4" />
         <span className="text-sm">Export</span>
       </Button>
     </nav>
